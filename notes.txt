@@ -1,0 +1,29 @@
+📗 What You Learn Overall
+
+Explore Hugging Face Hub — models, datasets, and Spaces for AI projects.
+
+Learn to use Google Colab for running AI models in the cloud.
+
+Integrate Hugging Face with Colab using secrets and API keys.
+
+Run open-source AI models (like LLaMA, Phi, Qwen, Starcoder) easily.
+
+Master Transformers Pipelines for quick NLP, vision, and speech tasks.
+
+Perform efficient AI inference with minimal code using pipelines.
+
+Understand tokenization — how text converts to tokens for LLMs.
+
+Compare tokenizers across models (LLaMA, PHI-3, QWEN2).
+
+Learn to load, quantize, and run models efficiently with bitsandbytes.
+
+Use Hugging Face Model class for custom inference and text generation.
+
+Generate creative outputs (like AI jokes) using transformer models.
+
+Combine frontier + open-source models for advanced use cases.
+
+Build AI meeting minute summarizers with OpenAI + Hugging Face.
+
+Create synthetic data generators for business testing or training AI.
