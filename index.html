@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meeting Minutes Studio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Private browser demo</p>
+          <h1>Meeting Minutes Studio</h1>
+          <p class="lede">
+            Upload or record a short English meeting clip, review the transcript, and generate Markdown minutes with decisions and action items.
+          </p>
+        </div>
+        <div class="status-panel" aria-live="polite">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText">Ready. No audio leaves your browser.</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel input-panel">
+          <div class="panel-heading">
+            <h2>Audio</h2>
+            <p>Short clips only: up to 30 seconds or 25 MB.</p>
+          </div>
+
+          <label class="drop-zone" id="dropZone">
+            <input id="audioFile" type="file" accept="audio/*,.wav,.mp3,.m4a,.webm,.ogg" />
+            <span class="drop-title">Choose audio file</span>
+            <span class="drop-meta" id="fileMeta">WAV, MP3, M4A, WebM, or OGG</span>
+          </label>
+
+          <div class="record-row">
+            <button id="recordButton" type="button">Record</button>
+            <button id="stopButton" type="button" disabled>Stop</button>
+            <span id="recordingTimer">00:00</span>
+          </div>
+
+          <button id="transcribeButton" type="button" class="primary">Transcribe audio</button>
+          <p class="fine-print">
+            First transcription downloads the open-source Whisper tiny English model to your browser cache. It may take a minute.
+          </p>
+        </div>
+
+        <div class="panel transcript-panel">
+          <div class="panel-heading">
+            <h2>Transcript</h2>
+            <p>Paste a transcript here if audio transcription is too slow or unsupported.</p>
+          </div>
+          <textarea id="transcript" spellcheck="true" placeholder="Transcript will appear here, or paste one manually."></textarea>
+          <div class="actions">
+            <button id="sampleButton" type="button">Use sample transcript</button>
+            <button id="minutesButton" type="button" class="primary">Generate minutes</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="panel-heading">
+          <h2>Minutes</h2>
+          <p>Markdown output for your meeting record.</p>
+        </div>
+        <pre id="minutesOutput" class="minutes-output">Generated minutes will appear here.</pre>
+        <div class="actions">
+          <button id="downloadButton" type="button" disabled>Download Markdown</button>
+          <button id="copyButton" type="button" disabled>Copy</button>
+        </div>
+      </section>
+
+      <section class="notes">
+        <h2>Limitations</h2>
+        <p>
+          This free version is best for short English audio. Long meetings should be transcribed elsewhere and pasted into the transcript box.
+          Minutes are generated locally with transparent rules rather than a paid LLM, so review them before sharing.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
