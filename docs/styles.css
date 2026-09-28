@@ -148,9 +148,16 @@ h2 {
 
 .panel-heading p,
 .fine-print,
-.notes p {
+.notes p,
+.transcript-meta {
   margin-bottom: 0;
   color: var(--muted);
+}
+
+.field-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .drop-zone {
@@ -210,8 +217,27 @@ textarea {
   resize: vertical;
   border: 1px solid var(--line);
   border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
   padding: 14px;
   line-height: 1.5;
+}
+
+.transcript-panel {
+  border-color: #c4d7df;
+}
+
+.transcript-panel.has-transcript {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(8, 108, 108, 0.12);
+}
+
+.transcript-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 0.92rem;
 }
 
 .output-panel {
@@ -244,5 +270,9 @@ textarea {
 
   .status-panel {
     width: 100%;
+  }
+
+  .transcript-meta {
+    display: grid;
   }
 }

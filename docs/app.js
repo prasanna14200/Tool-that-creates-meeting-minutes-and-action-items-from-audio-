@@ -11,7 +11,11 @@ const els = {
   recordingTimer: document.querySelector("#recordingTimer"),
   transcribeButton: document.querySelector("#transcribeButton"),
   transcript: document.querySelector("#transcript"),
+  transcriptPanel: document.querySelector("#transcriptPanel"),
+  transcriptState: document.querySelector("#transcriptState"),
+  transcriptCount: document.querySelector("#transcriptCount"),
   sampleButton: document.querySelector("#sampleButton"),
+  copyTranscriptButton: document.querySelector("#copyTranscriptButton"),
   minutesButton: document.querySelector("#minutesButton"),
   minutesOutput: document.querySelector("#minutesOutput"),
   downloadButton: document.querySelector("#downloadButton"),
@@ -35,6 +39,39 @@ Priya: I will update the onboarding copy by Friday and send it to Sarah for revi
 Sarah: Decision: we will keep the launch date as May 15 and use the current pricing structure.
 Michael: I can prepare the final dashboard screenshots by Wednesday.
 Sarah: Action item: Priya owns onboarding copy. Michael owns screenshots. Sarah will approve the launch email.`;
+
+function normalizeTranscriptResult(result) {
+  if (typeof result === "string") return result.trim();
+  if (result?.text) return String(result.text).trim();
+  if (Array.isArray(result?.chunks)) {
+    return result.chunks
+      .map((chunk) => chunk.text || "")
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+  return "";
+}
+
+function updateTranscriptState(message) {
+  const transcript = els.transcript.value.trim();
+  const words = transcript ? transcript.split(/\s+/).length : 0;
+  els.transcriptCount.textContent = `${words} ${words === 1 ? "word" : "words"}`;
+  els.transcriptState.textContent = message || (transcript ? "Transcript ready to review." : "No transcript yet.");
+  els.copyTranscriptButton.disabled = !transcript;
+}
+
+function showTranscript(transcript, sourceLabel) {
+  const cleanTranscript = transcript.trim();
+  if (!cleanTranscript) {
+    throw new Error("Transcription completed, but Whisper returned empty text. Try a clearer or longer clip, or paste a transcript manually.");
+  }
+  els.transcript.value = cleanTranscript;
+  updateTranscriptState(`${sourceLabel} transcript ready. Review or correct it before generating minutes.`);
+  els.transcriptPanel.classList.add("has-transcript");
+  els.transcriptPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  els.transcript.focus({ preventScroll: true });
+}
 
 function setStatus(message, type = "ok") {
   els.statusText.textContent = message;
@@ -138,8 +175,8 @@ async function transcribeSelectedAudio() {
       language: "english",
       task: "transcribe",
     });
-    els.transcript.value = (result.text || "").trim();
-    setStatus("Transcription complete.");
+    showTranscript(normalizeTranscriptResult(result), "Audio");
+    setStatus("Transcription complete. Transcript is visible and editable.");
   } catch (error) {
     setStatus(error.message || "Transcription failed.", "error");
   } finally {
@@ -313,6 +350,7 @@ function formatActionItems(items) {
 
 function generateAndRenderMinutes() {
   try {
+    updateTranscriptState("Transcript used for minutes. You can still edit it and regenerate.");
     lastMinutes = generateMinutes(els.transcript.value);
     els.minutesOutput.textContent = lastMinutes;
     els.downloadButton.disabled = false;
@@ -338,17 +376,29 @@ async function copyMinutes() {
   setStatus("Minutes copied.");
 }
 
+async function copyTranscript() {
+  const transcript = els.transcript.value.trim();
+  if (!transcript) {
+    setStatus("There is no transcript to copy yet.", "error");
+    return;
+  }
+  await navigator.clipboard.writeText(transcript);
+  setStatus("Transcript copied.");
+}
+
 els.audioFile.addEventListener("change", () => setSelectedFile(els.audioFile.files[0]));
 els.transcribeButton.addEventListener("click", transcribeSelectedAudio);
 els.recordButton.addEventListener("click", startRecording);
 els.stopButton.addEventListener("click", stopRecording);
 els.sampleButton.addEventListener("click", () => {
-  els.transcript.value = sampleTranscript;
+  showTranscript(sampleTranscript, "Sample");
   setStatus("Sample transcript loaded.");
 });
 els.minutesButton.addEventListener("click", generateAndRenderMinutes);
 els.downloadButton.addEventListener("click", downloadMinutes);
 els.copyButton.addEventListener("click", copyMinutes);
+els.copyTranscriptButton.addEventListener("click", copyTranscript);
+els.transcript.addEventListener("input", () => updateTranscriptState());
 
 els.dropZone.addEventListener("dragover", (event) => {
   event.preventDefault();

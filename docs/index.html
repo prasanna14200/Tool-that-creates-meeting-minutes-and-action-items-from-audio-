@@ -47,14 +47,21 @@
           </p>
         </div>
 
-        <div class="panel transcript-panel">
+        <div class="panel transcript-panel" id="transcriptPanel">
           <div class="panel-heading">
-            <h2>Transcript</h2>
-            <p>Paste a transcript here if audio transcription is too slow or unsupported.</p>
+            <p class="eyebrow">Step 2</p>
+            <h2>Review transcript</h2>
+            <p>After transcription, the text appears below. Edit or paste a transcript before generating minutes.</p>
           </div>
-          <textarea id="transcript" spellcheck="true" placeholder="Transcript will appear here, or paste one manually."></textarea>
+          <label class="field-label" for="transcript">Editable meeting transcript</label>
+          <textarea id="transcript" spellcheck="true" placeholder="Transcript will appear here after transcription, or paste one manually."></textarea>
+          <div class="transcript-meta">
+            <span id="transcriptState">No transcript yet.</span>
+            <span id="transcriptCount">0 words</span>
+          </div>
           <div class="actions">
             <button id="sampleButton" type="button">Use sample transcript</button>
+            <button id="copyTranscriptButton" type="button" disabled>Copy transcript</button>
             <button id="minutesButton" type="button" class="primary">Generate minutes</button>
           </div>
         </div>
